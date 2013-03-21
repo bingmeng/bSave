@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	</head>
+	<body>
+		<script type="text/javascript">
+			/** 本地存储 API */
+			function storage () {
+				var _storage = {},
+					userDataObj = undefined;
+				//if (!!window.localStorage) {
+				if (0) {
+					var store = window.localStorage;
+					_storage.setItem = function (key, data) {
+						store.setItem(key, data);
+					}
+					_storage.getItem = function (key) {
+						return store.getItem(key);
+					}
+					_storage.getLength = function () {
+						return store.length;
+					}
+					/** 返回本地存储中第num个键值对中的键 */
+					_storage.key = function (num) {
+						return store.key(num);
+					}
+					/** 返回由本地存储中所有键值对组成的数组 */
+					_storage.getAllValue = function () {
+						var len = store.length,
+							all = [];
+						while (len--) {
+							all.push({key: store.key(len), data: store.getItem(store.key(len))});
+						}
+						return all;
+					}
+					/** 删除指定键值对，并返回其值 */
+					_storage.removeItem = function (key) {
+						if (key) {
+							var data = store.getItem(key);
+							store.removeItem(key);
+							return data;
+						} else {
+							return undefined;
+						}
+					}
+				} else {
+					var userDataObj = document.createElement("div");
+					userDataObj.addBehavior("#default#userData");
+					document.body.appendChild(userDataObj);
+					_storage.setItem = function (key, data) {
+						userDataObj.setAttribute(key, data);
+						userDataObj.save("storage");
+					}
+					_storage.getItem = function (key) {
+						userDataObj.load("storage");
+						return userDataObj.getAttribute(key);
+					}
+					_storage.getLength = function () {
+						userDataObj.load("storage");
+						return userDataObj.XMLDocument.documentElement.attributes.length;
+					}
+					/** 返回本地存储中第num个键值对中的键 */
+					_storage.key = function (num) {
+						return userDataObj.XMLDocument.documentElement.attributes[len].xml.match(/^\w/)[0];
+					}
+					/** 返回由本地存储中所有键值对组成的数组 */
+					_storage.getAllValue = function () {
+						userDataObj.load("storage");
+						var attributes = userDataObj.XMLDocument.documentElement.attributes;
+							len = attributes.length,
+							all = [];
+						while (len--) {
+							all.push({key: attributes[len].xml.match(/^\w/)[0], data: attributes[len].xml.replace(/^\w*=/, "")});
+						}
+						return all;
+					}
+					/** 删除指定键值对，并返回其值 */
+					_storage.removeItem = function (key) {
+						if (key) {
+							var data = userDataObj.getAttribute(key);
+							userDataObj.removeAttribute(key);
+							return data;
+						} else {
+							return undefined;
+						}
+					}
+				}
+				return _storage;
+			}
+			/** 业务逻辑 */
+			/** 发送符合发送条件的数据 */
+			function send () {
+				var allValue = storage.getAllValue(),
+					len = allValue.length;
+				while (len--) {
+					if (new Date() - allValue[len].data.match(/^\d*/)[0] - 10000 > 0) {
+						new Image().src = "http://www.test.com/" + storage.removeItem(allValue[len].key).replace(/\d*#/, "");
+					}
+				}
+			}
+			/** 初始化本地存储 API */
+			var storage = storage();
+			/*
+			send();
+			setInterval(send, 30000);
+			*/
+			top.location.hash = storage.getItem("m");
+			window.onresize = function () {
+				var key = window.location.hash.match(/^#(\w*)#/)[1];
+				var data = window.location.hash.replace(/^#\w*#/, "");
+				storage.setItem(key, new Date().getTime() + "#" + data);
+			}
+			window.onmessage = function (evt) {
+				var evt = evt || window.event;
+				var key = evt.data.match(/^#(\w*)#/)[1];
+				var data = evt.data.replace(/^#\w*#/, "");
+				storage.setItem(key, new Date().getTime() + "#" + data);
+			}
+		</script>
+	</body>
+</html>
