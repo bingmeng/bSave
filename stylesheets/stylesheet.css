@@ -158,11 +158,9 @@ img {
   -ms-box-shadow: 0 0 5px #ebebeb;
 }
 
-pre, code {
-  width: 100%;
+code {
   color: #222;
   background-color: #fff;
-
   font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
   font-size: 14px;
 
@@ -174,22 +172,19 @@ pre, code {
 
 }
 
-pre {
-  width: 100%;
-  padding: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,.1);
-  overflow: auto;
-}
-
 code {
-  padding: 3px;
-  margin: 0 3px;
-  box-shadow: 0 0 10px rgba(0,0,0,.1);
+  display:block;
+  padding: 13px;
+  box-shadow: none;
 }
 
-pre code {
-  display: block;
-  box-shadow: none;
+#users {
+	background:#fff;
+	box-shadow:none;
+	border-radius:2px;
+	-moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+	padding:10px;
 }
 
 blockquote {
