@@ -9,8 +9,7 @@
 			function storage () {
 				var _storage = {},
 					userDataObj = undefined;
-				//if (!!window.localStorage) {
-				if (0) {
+				if (!!window.localStorage) {
 					var store = window.localStorage;
 					_storage.setItem = function (key, data) {
 						store.setItem(key, data);
@@ -88,27 +87,11 @@
 				}
 				return _storage;
 			}
-			/** 业务逻辑 */
-			/** 发送符合发送条件的数据 */
-			function send () {
-				var allValue = storage.getAllValue(),
-					len = allValue.length;
-				while (len--) {
-					if (new Date() - allValue[len].data.match(/^\d*/)[0] - 10000 > 0) {
-						new Image().src = "http://www.test.com/" + storage.removeItem(allValue[len].key).replace(/\d*#/, "");
-					}
-				}
-			}
 			/** 初始化本地存储 API */
 			var storage = storage();
-			/*
-			send();
-			setInterval(send, 30000);
-			*/
-			top.location.hash = storage.getItem("m");
 			window.onresize = function () {
-				var key = window.location.hash.match(/^#(\w*)#/)[1];
-				var data = window.location.hash.replace(/^#\w*#/, "");
+				var key = location.hash.match(/^#(\w*)#/)[1];
+				var data = location.hash.replace(/^#\w*#/, "");
 				storage.setItem(key, new Date().getTime() + "#" + data);
 			}
 			window.onmessage = function (evt) {

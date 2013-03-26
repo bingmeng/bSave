@@ -3,7 +3,7 @@
 		inputTimer = undefined,
 		proxy = undefined,
 		workMode = undefined,
-		proxyUrl = "http://www.test.com/proxy.html";
+		proxyUrl = "http://www.test3.com/proxy.html";
 	/** 将待存储队列中的数据存入本地存储 */
 	function set (str) {
 		if (workMode === "normalMode") {
