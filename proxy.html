@@ -90,6 +90,10 @@
 			/** 初始化本地存储 API */
 			var storage = storage();
 			window.onresize = function () {
+				/** 当 hash 为空时直接返回 */
+				if (!location.hash) {
+					return;
+				}
 				var key = location.hash.match(/^#(\w*)#/)[1];
 				var data = location.hash.replace(/^#\w*#/, "");
 				storage.setItem(key, new Date().getTime() + "#" + data);
@@ -100,6 +104,11 @@
 				var data = evt.data.replace(/^#\w*#/, "");
 				storage.setItem(key, new Date().getTime() + "#" + data);
 			}
+		</script>
+		<script>
+			console.log(storage.key(0) + ": " + storage.getItem(storage.key(0)));
+			console.log(storage.key(1) + ": " + storage.getItem(storage.key(1)));
+			console.log(storage.getAllValue()[1].key);
 		</script>
 	</body>
 </html>
