@@ -112,19 +112,49 @@
 				if (!location.hash) {
 					return;
 				}
-				var key = location.hash.match(/^#(\w*)#/)[1];
-				var data = location.hash.replace(/^#\w*#/, "");
-				storage.setItem(key, new Date().getTime() + "#" + data);
+				var hashData = location.hash.split("#");
+				var key = hashData[1];
+				var data = hashData[2];
+				var cmd = hashData[3];
+				switch (cmd) {
+					case "setItem": {
+						storage.setItem(key, data);
+						break;
+					}
+					case "removeItem": {
+						storage.removeItem(key);
+						break;
+					}
+					case "removeAll": {
+						storage.removeAll();
+						break;
+					}
+				}
 			}
 			window.onmessage = function (evt) {
 				var evt = evt || window.event;
-				var key = evt.data.match(/^#(\w*)#/)[1];
-				var data = evt.data.replace(/^#\w*#/, "");
-				storage.setItem(key, data);
+				var hashData = evt.data.split("#");
+				var key = hashData[1];
+				var data = hashData[2];
+				var cmd = hashData[3];
+				switch (cmd) {
+					case "setItem": {
+						storage.setItem(key, data);
+						break;
+					}
+					case "removeItem": {
+						storage.removeItem(key);
+						break;
+					}
+					case "removeAll": {
+						storage.removeAll();
+						break;
+					}
+				}
 			}
 		</script>
 		<script>
-			storage.removeAll();
+			//storage.removeAll();
 			console.log(storage.key(0) + ": " + storage.getItem(storage.key(0)));
 			console.log(storage.key(1) + ": " + storage.getItem(storage.key(1)));
 		</script>

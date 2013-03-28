@@ -5,7 +5,8 @@
 		workMode = undefined,
 		proxyUrl = "http://www.test3.com/proxy.html";
 	/** 将待存储队列中的数据存入本地存储 */
-	function set (str) {
+	function set (data, cmd) {
+		var str = data + "#" + cmd;
 		if (workMode === "normalMode") {
 			proxy.contentWindow.postMessage(str, "*");
 		} else {
@@ -22,13 +23,15 @@
 	 * @param key string 必须为数字、字母、下划线组成的字符串。
 	 * @param data string key对应的数据。
 	 */
-	function save(key, data) {
-		var str = "#" + key + "#" + data;
-		inputArray.push(str);
-		if (!inputTimer) {
-			inputTimer = setInterval(function () {
-				inputArray.length && set(inputArray.shift());
-			}, 50);
+	function save(cmd) {
+		return function (key, data) {
+			var str = "#" + key + "#" + data;
+			inputArray.push(str);
+			if (!inputTimer) {
+				inputTimer = setInterval(function () {
+					inputArray.length && set(inputArray.shift(), cmd);
+				}, 50);
+			}
 		}
 	}
 	/** 初始化跨域模块（代理iframe） */
@@ -40,5 +43,9 @@
 		d.body.appendChild(proxy);
 	}
 	initialize();
-	window.save = save;
+	window.bsave = {
+		setItem: save("setItem"),
+		removeItem: save("removeItem"),
+		removeAll: save("removeAll")
+	};
 })(document);
