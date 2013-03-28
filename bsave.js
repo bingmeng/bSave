@@ -40,7 +40,7 @@
 	 * 初始化跨域模块（代理iframe）
 	 */
 	function initialize () {
-		workMode = /msie 6.0|msie 7.0/i.test(navigator.userAgent) ? "compatMode" : "normalMode";
+		workMode = /msie (6.0|7.0)/i.test(navigator.userAgent) ? "compatMode" : "normalMode";
 		proxy = d.createElement("iframe");
 		proxy.style.cssText = "visibility:hidden;width:100px;";
 		proxy.src = proxyUrl;
