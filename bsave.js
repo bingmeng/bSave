@@ -4,7 +4,9 @@
 		proxy = undefined,
 		workMode = undefined,
 		proxyUrl = "http://www.test3.com/proxy.html";
-	/** 将待存储队列中的数据存入本地存储 */
+	/**
+	 * 将待存储队列中的数据存入本地存储
+	 */
 	function set (data, cmd) {
 		var str = data + "#" + cmd;
 		if (workMode === "normalMode") {
@@ -34,9 +36,11 @@
 			}
 		}
 	}
-	/** 初始化跨域模块（代理iframe） */
+	/**
+	 * 初始化跨域模块（代理iframe）
+	 */
 	function initialize () {
-		workMode = /msie 6.0|msie 7.0/i.test(navigator.userAgent.split(";")[1]) ? "compatMode" : "normalMode";
+		workMode = /msie 6.0|msie 7.0/i.test(navigator.userAgent) ? "compatMode" : "normalMode";
 		proxy = d.createElement("iframe");
 		proxy.style.cssText = "visibility:hidden;width:100px;";
 		proxy.src = proxyUrl;
