@@ -25,7 +25,7 @@
 						return store.key(num);
 					}
 					/** 返回由本地存储中所有键值对组成的数组 */
-					_storage.getAllValue = function () {
+					_storage.getAll = function () {
 						var len = store.length,
 							all = [];
 						while (len--) {
@@ -41,6 +41,15 @@
 							return data;
 						} else {
 							return undefined;
+						}
+					}
+					/**
+					 * 删除所有数据
+					 */
+					_storage.removeAll = function () {
+						var len = this.getLength();
+						while (len--) {
+							this.removeItem(this.key(len));
 						}
 					}
 				} else {
@@ -64,7 +73,7 @@
 						return userDataObj.XMLDocument.documentElement.attributes[len].xml.match(/^\w/)[0];
 					}
 					/** 返回由本地存储中所有键值对组成的数组 */
-					_storage.getAllValue = function () {
+					_storage.getAll = function () {
 						userDataObj.load("storage");
 						var attributes = userDataObj.XMLDocument.documentElement.attributes;
 							len = attributes.length,
@@ -84,13 +93,22 @@
 							return undefined;
 						}
 					}
+					/**
+					 * 删除所有数据
+					 */
+					_storage.removeAll = function () {
+						var len = this.getLength();
+						while (len--) {
+							this.removeItem(this.key(len));
+						}
+					}
 				}
 				return _storage;
 			}
 			/** 初始化本地存储 API */
 			var storage = storage();
 			window.onresize = function () {
-				/** 当 hash 为空时直接返回 */
+				/** 当 hash 为空时直接返回，在IE中页面载入时可能会触发onresize */
 				if (!location.hash) {
 					return;
 				}
@@ -102,13 +120,13 @@
 				var evt = evt || window.event;
 				var key = evt.data.match(/^#(\w*)#/)[1];
 				var data = evt.data.replace(/^#\w*#/, "");
-				storage.setItem(key, new Date().getTime() + "#" + data);
+				storage.setItem(key, data);
 			}
 		</script>
 		<script>
+			storage.removeAll();
 			console.log(storage.key(0) + ": " + storage.getItem(storage.key(0)));
 			console.log(storage.key(1) + ": " + storage.getItem(storage.key(1)));
-			console.log(storage.getAllValue()[1].key);
 		</script>
 	</body>
 </html>
